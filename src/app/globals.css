@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --bg:        #ffffff;
+    --bg-2:      #f9fafb;
+    --bg-3:      #f3f4f6;
+    --border:    #e5e7eb;
+    --border-2:  #d1d5db;
+    --text-1:    #111827;
+    --text-2:    #4b5563;
+    --text-3:    #9ca3af;
+  }
+  .dark {
+    --bg:        #0f0f12;
+    --bg-2:      #17171c;
+    --bg-3:      #1f1f26;
+    --border:    #2a2a35;
+    --border-2:  #3a3a48;
+    --text-1:    #f9fafb;
+    --text-2:    #9ca3af;
+    --text-3:    #6b7280;
+  }
+  html { @apply antialiased; }
+  body { background: var(--bg); color: var(--text-1); font-family: 'Inter', system-ui, sans-serif; }
+}
+
+@layer components {
+  /* Cards */
+  .card      { background: var(--bg-2); border: 1px solid var(--border); @apply rounded-xl; }
+  .card-md   { background: var(--bg-2); border: 1px solid var(--border); @apply rounded-2xl; }
+
+  /* Buttons */
+  .btn       { @apply inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-all text-sm px-4 py-2 disabled:opacity-40 disabled:cursor-not-allowed; }
+  .btn-primary { @apply btn bg-sc-600 hover:bg-sc-500 text-white; }
+  .btn-ghost  { @apply btn border text-sm; border-color: var(--border-2); color: var(--text-2); }
+  .btn-ghost:hover { background: var(--bg-3); }
+  .btn-danger { @apply btn bg-red-600 hover:bg-red-500 text-white; }
+
+  /* Inputs */
+  .input { @apply w-full px-3 py-2 rounded-lg text-sm transition-all outline-none; background: var(--bg-3); border: 1px solid var(--border); color: var(--text-1); }
+  .input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.15); }
+  .input::placeholder { color: var(--text-3); }
+  .label { @apply block text-xs font-semibold uppercase tracking-wider mb-1.5; color: var(--text-3); }
+
+  /* Badges */
+  .badge           { @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium; }
+  .badge-green     { @apply badge bg-emerald-500/10 text-emerald-400; }
+  .badge-amber     { @apply badge bg-amber-500/10 text-amber-400; }
+  .badge-red       { @apply badge bg-red-500/10 text-red-400; }
+  .badge-blue      { @apply badge bg-sc-500/10 text-sc-400; }
+  .badge-gray      { @apply badge; background: var(--bg-3); color: var(--text-3); }
+  .badge-verified  { @apply badge-green; }
+
+  /* Section labels */
+  .eyebrow { @apply text-xs font-semibold uppercase tracking-widest; color: var(--text-3); }
+
+  /* Skill pills */
+  .pill-verified { @apply badge bg-sc-500/10 text-sc-300 border border-sc-500/20; }
+  .pill-claimed  { @apply badge; background: var(--bg-3); color: var(--text-3); border: 1px solid var(--border); }
+
+  /* Score bar */
+  .score-bar { @apply h-1.5 rounded-full; background: var(--bg-3); }
+}
