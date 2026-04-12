@@ -12,12 +12,14 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.383.0",
     "next": "^16.2.3",
+    "nodemailer": "^8.0.5",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
