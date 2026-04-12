@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
   images: { unoptimized: true },
-  basePath: '/SignalCrew',        // your repo name
-  assetPrefix: '/SignalCrew/',    // your repo name
+  basePath: process.env.NODE_ENV === 'production' ? '/SignalCrew' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/SignalCrew/' : '',
 };
 module.exports = nextConfig

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Check, ArrowRight, Shield, Star, Zap, Globe, Users, Search, ChevronRight, AlertCircle } from 'lucide-react'
 import ThemeToggle from '@/components/ui/ThemeToggle'
@@ -37,18 +37,15 @@ const VALUE_OPTIONS = [
   'Replacing my current referral process',
 ]
 
-// ──────────────────────────────────────────────────────────────────────────────
-// TO ACTIVATE REAL EMAIL SUBMISSIONS:
-// 1. Go to https://formspree.io — free account, no credit card
-// 2. Click "New Form" → name it "Signal Crew Waitlist"
-// 3. Copy the form ID (e.g. "xpwzdabc")
-// 4. Replace YOUR_FORM_ID below with your actual ID
-// 5. Add your email in Formspree dashboard — submissions go straight to your inbox
-// ──────────────────────────────────────────────────────────────────────────────
-const FORMSPREE_ID = 'YOUR_FORM_ID'
-const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_ID}`
+const WAITLIST_API = '/api/waitlist'
 
 export default function LandingPage() {
+  type SavedEntry = {
+    email: string
+    company: string
+    submittedAt: string
+  }
+
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [company, setCompany] = useState('')
@@ -58,9 +55,48 @@ export default function LandingPage() {
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [savedEntries, setSavedEntries] = useState<SavedEntry[]>([])
+
+  const isDuplicate = Boolean(email && company && savedEntries.some(entry =>
+    entry.email.toLowerCase() === email.trim().toLowerCase() &&
+    entry.company.toLowerCase() === company.trim().toLowerCase()
+  ))
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const saved = window.localStorage.getItem('signalcrewWaitlist')
+    if (!saved) return
+
+    try {
+      const entries = JSON.parse(saved)
+      if (Array.isArray(entries)) {
+        setSavedEntries(entries)
+      }
+    } catch {
+      // ignore invalid local data
+    }
+  }, [])
 
   function toggleValue(v: string) {
     setValues(prev => prev.includes(v) ? prev.filter(x => x !== v) : [...prev, v])
+  }
+
+  function hasSavedEntry(emailValue: string, companyValue: string) {
+    return savedEntries.some(entry =>
+      entry.email.toLowerCase() === emailValue.trim().toLowerCase() &&
+      entry.company.toLowerCase() === companyValue.trim().toLowerCase()
+    )
+  }
+
+  function saveEntry(entry: SavedEntry) {
+    const nextEntries = savedEntries.filter(existing =>
+      !(existing.email.toLowerCase() === entry.email.toLowerCase() &&
+        existing.company.toLowerCase() === entry.company.toLowerCase())
+    )
+    const updated = [...nextEntries, entry]
+    setSavedEntries(updated)
+    window.localStorage.setItem('signalcrewWaitlist', JSON.stringify(updated))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -68,27 +104,43 @@ export default function LandingPage() {
     setSubmitting(true)
     setError('')
 
-    if (FORMSPREE_ID === 'YOUR_FORM_ID') {
-      // Demo mode — no real endpoint yet, simulate success
-      setTimeout(() => { setSubmitted(true); setSubmitting(false) }, 700)
+    if (!email || !company) {
+      setError('Please provide both email and company before submitting.')
+      setSubmitting(false)
+      return
+    }
+
+    if (hasSavedEntry(email, company)) {
+      setError('You have already requested early access for this company with this email.')
+      setSubmitting(false)
       return
     }
 
     try {
-      const res = await fetch(FORMSPREE_URL, {
+      const res = await fetch(WAITLIST_API, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name, email, company,
+          name,
+          email,
+          company,
           role: ROLE_OPTIONS.find(r => r.value === role)?.label ?? role,
           state,
           interested_in: values.join(', ') || 'None selected',
-          _subject: `New Signal Crew waitlist signup — ${name} (${company})`,
         }),
       })
       const data = await res.json()
-      if (res.ok) { setSubmitted(true) }
-      else { setError(data?.errors?.[0]?.message ?? 'Something went wrong. Please try again.') }
+      if (res.ok) {
+        const payload = {
+          email,
+          company,
+          submittedAt: new Date().toISOString(),
+        }
+        saveEntry(payload)
+        setSubmitted(true)
+      } else {
+        setError(data?.error ?? 'Something went wrong. Please try again.')
+      }
     } catch {
       setError('Network error. Please check your connection and try again.')
     } finally {
@@ -246,9 +298,13 @@ export default function LandingPage() {
                 <div>
                   <label className="label">Company name</label>
                   <input className="input" placeholder="Your business name" value={company} onChange={e => setCompany(e.target.value)} required />
+                  {isDuplicate && (
+                    <p className="text-xs mt-2" style={{ color: '#f97316' }}>
+                      This email and company combination was already submitted. Use a different company or email if you want another request.
+                    </p>
+                  )}
                 </div>
               </div>
-
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="label">Work email</label>
@@ -300,7 +356,7 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              <button type="submit" disabled={submitting || !email || !name || !role}
+              <button type="submit" disabled={submitting || !email || !name || !role || isDuplicate}
                 className="btn-primary w-full text-base py-3 gap-2">
                 {submitting ? 'Submitting…' : <span className="flex items-center justify-center gap-2">Request early access <ChevronRight size={16} /></span>}
               </button>
