@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { CheckCircle, Info } from 'lucide-react'
 
@@ -24,7 +23,6 @@ function Tri({ label, value, onChange, opts }: { label: string; value: string; o
 }
 
 export default function PropertyReportPage() {
-  const params = useSearchParams()
   const [done, setDone] = useState(false)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
