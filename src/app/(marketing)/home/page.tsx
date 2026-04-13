@@ -164,6 +164,11 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
+            <Link href="/login"
+              className="text-xs px-3 py-1.5 rounded-lg border transition-colors hover:border-sc-500"
+              style={{ borderColor: 'var(--border-2)', color: 'var(--text-2)' }}>
+              Sign in
+            </Link>
             <Link href="/dashboard"
               className="text-xs px-3 py-1.5 rounded-lg border transition-colors hover:border-sc-500"
               style={{ borderColor: 'var(--border-2)', color: 'var(--text-2)' }}>
@@ -194,6 +199,9 @@ export default function LandingPage() {
           <a href="#waitlist" className="btn-primary px-6 py-3 text-base gap-2">
             Request early access <ChevronRight size={16} />
           </a>
+          <Link href="/login" className="btn btn-ghost px-6 py-3 text-base gap-2">
+            Sign in <ArrowRight size={15} />
+          </Link>
           <Link href="/dashboard" className="btn btn-ghost px-6 py-3 text-base gap-2">
             Explore the demo <ArrowRight size={15} />
           </Link>
