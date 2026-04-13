@@ -52,6 +52,7 @@ export default function LandingPage() {
   const [role, setRole] = useState('')
   const [values, setValues] = useState<string[]>([])
   const [state, setState] = useState('')
+  const [city, setCity] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -126,6 +127,7 @@ export default function LandingPage() {
           company,
           role: ROLE_OPTIONS.find(r => r.value === role)?.label ?? role,
           state,
+          city,
           interested_in: values.join(', ') || 'None selected',
         }),
       })
@@ -311,8 +313,17 @@ export default function LandingPage() {
                   <input className="input" type="email" placeholder="you@business.com" value={email} onChange={e => setEmail(e.target.value)} required />
                 </div>
                 <div>
+                  <label className="label">City</label>
+                  <input className="input" placeholder="e.g. Oklahoma City" value={city} onChange={e => setCity(e.target.value)} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
                   <label className="label">State</label>
                   <input className="input" placeholder="e.g. OK, TX, KS" value={state} onChange={e => setState(e.target.value)} />
+                </div>
+                <div>
+                  {/* Empty div to maintain grid layout */}
                 </div>
               </div>
 

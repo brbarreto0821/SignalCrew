@@ -15,6 +15,7 @@ type WaitlistPayload = {
   company: string
   role: string
   state: string
+  city: string
   interested_in: string
 }
 
@@ -30,6 +31,7 @@ function validateBody(body: any): ValidationResult {
   const company = sanitize(body.company, 100)
   const role = sanitize(body.role, 100)
   const state = sanitize(body.state, 50)
+  const city = sanitize(body.city, 100)
   const interested_in = sanitize(body.interested_in, 1000)
 
   if (!name) return { ok: false, error: 'Name is required' }
@@ -38,7 +40,7 @@ function validateBody(body: any): ValidationResult {
 
   return {
     ok: true,
-    data: { name, email, company, role, state, interested_in },
+    data: { name, email, company, role, state, city, interested_in },
   }
 }
 
@@ -60,7 +62,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: validation.error }, { status: 400 })
   }
 
-  const { name, email, company, role, state, interested_in } = validation.data
+  const { name, email, company, role, state, city, interested_in } = validation.data
   const timestamp = new Date().toISOString()
   const text = [
     `New early access request received (${timestamp})`,
@@ -68,6 +70,7 @@ export async function POST(request: Request) {
     `Email: ${email}`,
     `Company: ${company || 'N/A'}`,
     `Role: ${role}`,
+    `City: ${city || 'N/A'}`,
     `State: ${state || 'N/A'}`,
     `Interested in: ${interested_in || 'N/A'}`,
   ].join('\n')
