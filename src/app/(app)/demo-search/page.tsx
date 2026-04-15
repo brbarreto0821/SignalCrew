@@ -162,7 +162,7 @@ export default function SearchPage() {
 function CrewCard({ crew: c }: { crew: Crew }) {
   const verifiedTrades = c.trades.filter(t => t.verified).slice(0, 3)
   return (
-    <Link href={`/profile/${c.slug}`}
+    <Link href={`/demo-profile/${c.slug}`}
       className="card p-4 block transition-all hover:border-sc-500"
       style={{ borderColor: 'var(--border)' }}>
       <div className="flex items-start gap-3 mb-3">

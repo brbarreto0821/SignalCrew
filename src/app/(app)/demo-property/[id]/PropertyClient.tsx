@@ -52,7 +52,7 @@ export default function PropertyClient({ prop, id }: PropertyClientProps) {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <Link href="/property/search" className="text-xs mb-5 inline-flex items-center gap-1" style={{ color: 'var(--text-3)' }}>← Property search</Link>
+      <Link href="/demo-property/search" className="text-xs mb-5 inline-flex items-center gap-1" style={{ color: 'var(--text-3)' }}>← Property search</Link>
 
       <div className="card p-6 mb-5">
         <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -72,7 +72,7 @@ export default function PropertyClient({ prop, id }: PropertyClientProps) {
               </div>
             </div>
           </div>
-          <Link href={`/property/report?id=${id}`} className="btn-primary flex items-center gap-2 flex-shrink-0">
+          <Link href={`/demo-property/report?id=${id}`} className="btn-primary flex items-center gap-2 flex-shrink-0">
             <Plus size={14} /> Submit report
           </Link>
         </div>
@@ -91,7 +91,7 @@ export default function PropertyClient({ prop, id }: PropertyClientProps) {
             No verified contractors have submitted a report for {prop.street} yet.
             <br /><strong>No reports does not mean a clean record.</strong>
           </p>
-          <Link href={`/property/report?id=${id}`} className="btn-primary inline-flex gap-2 items-center">
+          <Link href={`/demo-property/report?id=${id}`} className="btn-primary inline-flex gap-2 items-center">
             <Plus size={14} /> Submit the first report
           </Link>
         </div>

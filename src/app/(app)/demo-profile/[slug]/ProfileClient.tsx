@@ -34,7 +34,7 @@ export default function ProfileClient({ crew, currentUser }: ProfileClientProps)
       )}
 
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <Link href="/search" className="text-xs mb-6 inline-flex items-center gap-1" style={{ color: 'var(--text-3)' }}>
+        <Link href="/demo-search" className="text-xs mb-6 inline-flex items-center gap-1" style={{ color: 'var(--text-3)' }}>
           ← Back to search
         </Link>
 

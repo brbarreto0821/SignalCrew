@@ -6,3 +6,5 @@ node_modules/
 *.tsbuildinfo
 next-env.d.ts
 SignalFile.md
+copilot-instructions.md
+docs/

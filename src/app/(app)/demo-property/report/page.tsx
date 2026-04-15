@@ -46,7 +46,7 @@ export default function PropertyReportPage() {
       <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--text-1)' }}>Report submitted</h2>
       <p className="text-sm mb-6" style={{ color: 'var(--text-2)' }}>Your report is in the moderation queue and will be published within 24 hours after review.</p>
       <div className="flex gap-3 justify-center">
-        <Link href="/property/search" className="btn-primary">Search another address</Link>
+        <Link href="/demo-property/search" className="btn-primary">Search another address</Link>
         <button onClick={() => setDone(false)} className="btn btn-ghost">Submit another</button>
       </div>
     </div>

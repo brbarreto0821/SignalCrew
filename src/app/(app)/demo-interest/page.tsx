@@ -319,7 +319,7 @@ export default function InterestPage() {
               <p className="text-xs font-semibold mb-3" style={{ color: 'var(--text-3)' }}>Verified crews for this trade</p>
               <div className="space-y-3">
                 {relevantCrews.map(c => (
-                  <Link key={c.id} href={`/profile/${c.slug}`} className="flex items-center gap-2.5 group">
+                  <Link key={c.id} href={`/demo-profile/${c.slug}`} className="flex items-center gap-2.5 group">
                     <div className="w-8 h-8 rounded-full bg-sc-600/10 flex items-center justify-center text-sc-300 text-xs font-semibold flex-shrink-0">
                       {getInitials(c.name)}
                     </div>
@@ -331,7 +331,7 @@ export default function InterestPage() {
                   </Link>
                 ))}
               </div>
-              <Link href="/search" className="text-xs mt-3 block text-sc-400 hover:text-sc-300">
+              <Link href="/demo-search" className="text-xs mt-3 block text-sc-400 hover:text-sc-300">
                 Search all crews →
               </Link>
             </div>

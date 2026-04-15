@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Mail, Lock, AlertCircle } from 'lucide-react'
 import { supabase } from '@/lib/supabaseClient'
@@ -9,6 +10,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,10 +27,9 @@ export default function LoginPage() {
       setLoading(false)
       return
     }
-    // Optionally redirect or show success
     setError('')
     setLoading(false)
-    // window.location.href = '/dashboard' // Uncomment to redirect after login
+    router.replace('/dashboard')
   }
 
   return (
@@ -105,7 +106,7 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <p className="text-sm" style={{ color: 'var(--text-2)' }}>
               Don&apos;t have an account?{' '}
-              <Link href="/interest" className="hover:underline" style={{ color: 'var(--sc-400)' }}>
+              <Link href="/demo-interest" className="hover:underline" style={{ color: 'var(--sc-400)' }}>
                 Request early access
               </Link>
             </p>

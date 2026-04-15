@@ -1,8 +1,10 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Check, ArrowRight, Shield, Star, Zap, Globe, Users, Search, ChevronRight, AlertCircle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Check, ArrowRight, Shield, Star, Zap, Globe, Users, Search, ChevronRight, AlertCircle, LogOut, UserCircle } from 'lucide-react'
 import ThemeToggle from '@/components/ui/ThemeToggle'
+import { supabase } from '@/lib/supabaseClient'
 
 const INDUSTRIES = [
   'General Contracting','Electrical','Plumbing','HVAC','Concrete','Roofing',
@@ -44,6 +46,23 @@ export default function LandingPage() {
     email: string
     company: string
     submittedAt: string
+  }
+
+  const router = useRouter()
+  const [authUser, setAuthUser] = useState<any>(null)
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setAuthUser(data.user ?? null))
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthUser(session?.user ?? null)
+    })
+    return () => listener.subscription.unsubscribe()
+  }, [])
+
+  async function handleSignOut() {
+    await supabase.auth.signOut()
+    setAuthUser(null)
+    router.refresh()
   }
 
   const [email, setEmail] = useState('')
@@ -164,17 +183,31 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <Link href="/login"
-              className="text-xs px-3 py-1.5 rounded-lg border transition-colors hover:border-sc-500"
-              style={{ borderColor: 'var(--border-2)', color: 'var(--text-2)' }}>
-              Sign in
-            </Link>
-            <Link href="/dashboard"
-              className="text-xs px-3 py-1.5 rounded-lg border transition-colors hover:border-sc-500"
-              style={{ borderColor: 'var(--border-2)', color: 'var(--text-2)' }}>
-              View demo
-            </Link>
-            <a href="#waitlist" className="btn-primary text-xs px-3 py-1.5">Request access</a>
+            {authUser ? (
+              <>
+                <Link href="/dashboard" className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg border transition-colors hover:border-sc-500" style={{ borderColor: 'var(--border-2)', color: 'var(--text-2)' }}>
+                  <UserCircle size={14} />
+                  {authUser.user_metadata?.firstName || authUser.email?.split('@')[0] || 'Account'}
+                </Link>
+                <button onClick={handleSignOut} className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border transition-colors hover:border-red-500" style={{ borderColor: 'var(--border-2)', color: 'var(--text-2)' }}>
+                  <LogOut size={13} /> Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login"
+                  className="text-xs px-3 py-1.5 rounded-lg border transition-colors hover:border-sc-500"
+                  style={{ borderColor: 'var(--border-2)', color: 'var(--text-2)' }}>
+                  Sign in
+                </Link>
+                <Link href="/demo-dashboard"
+                  className="text-xs px-3 py-1.5 rounded-lg border transition-colors hover:border-sc-500"
+                  style={{ borderColor: 'var(--border-2)', color: 'var(--text-2)' }}>
+                  View demo
+                </Link>
+                <a href="#waitlist" className="btn-primary text-xs px-3 py-1.5">Request access</a>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -196,15 +229,23 @@ export default function LandingPage() {
           find, vet, and connect with trusted crews — before the job starts.
         </p>
         <div className="flex items-center justify-center gap-3 flex-wrap">
-          <a href="#waitlist" className="btn-primary px-6 py-3 text-base gap-2">
-            Request early access <ChevronRight size={16} />
-          </a>
-          <Link href="/login" className="btn btn-ghost px-6 py-3 text-base gap-2">
-            Sign in <ArrowRight size={15} />
-          </Link>
-          <Link href="/dashboard" className="btn btn-ghost px-6 py-3 text-base gap-2">
-            Explore the demo <ArrowRight size={15} />
-          </Link>
+          {authUser ? (
+            <Link href="/dashboard" className="btn-primary px-6 py-3 text-base gap-2">
+              Go to Dashboard <ArrowRight size={15} />
+            </Link>
+          ) : (
+            <>
+              <a href="#waitlist" className="btn-primary px-6 py-3 text-base gap-2">
+                Request early access <ChevronRight size={16} />
+              </a>
+              <Link href="/login" className="btn btn-ghost px-6 py-3 text-base gap-2">
+                Sign in <ArrowRight size={15} />
+              </Link>
+              <Link href="/demo-dashboard" className="btn btn-ghost px-6 py-3 text-base gap-2">
+                Explore the demo <ArrowRight size={15} />
+              </Link>
+            </>
+          )}
         </div>
         <p className="text-xs mt-5" style={{ color: 'var(--text-3)' }}>
           Verified contractors only · Private network · Not a public directory
@@ -400,7 +441,9 @@ export default function LandingPage() {
           <p className="text-xs" style={{ color: 'var(--text-3)' }}>Private network · Verified contractors only · Not a public directory</p>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <Link href="/dashboard" className="text-xs" style={{ color: 'var(--text-3)' }}>Explore demo →</Link>
+            {!authUser && (
+              <Link href="/demo-dashboard" className="text-xs" style={{ color: 'var(--text-3)' }}>Explore demo →</Link>
+            )}
           </div>
         </div>
       </footer>

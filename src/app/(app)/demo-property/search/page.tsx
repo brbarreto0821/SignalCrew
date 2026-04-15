@@ -157,7 +157,7 @@ export default function PropertySearchPage() {
         </p>
         <div className="space-y-3">
           {results.map(p => (
-            <Link key={p.id} href={`/property/${p.id}`}
+            <Link key={p.id} href={`/demo-property/${p.id}`}
               className="card p-4 flex items-start gap-4 block hover:border-sc-500 transition-all">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'var(--bg-3)' }}>
                 <MapPin size={16} style={{ color: 'var(--text-3)' }} />

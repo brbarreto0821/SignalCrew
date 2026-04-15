@@ -7,11 +7,11 @@ import { CURRENT_USER, getInitials } from '@/lib/data'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 
 const NAV = [
-  { href: '/dashboard',       label: 'Dashboard',   icon: LayoutDashboard },
-  { href: '/search',          label: 'Find crews',  icon: Search },
-  { href: '/connections',     label: 'Connections', icon: Users },
-  { href: '/property/search', label: 'Properties',  icon: MapPin },
-  { href: '/interest',        label: 'Project needs', icon: Zap },
+  { href: '/dashboard',            label: 'Dashboard',   icon: LayoutDashboard },
+  { href: '/demo-search',          label: 'Find crews',  icon: Search },
+  { href: '/demo-connections',     label: 'Connections', icon: Users },
+  { href: '/demo-property/search', label: 'Properties',  icon: MapPin },
+  { href: '/demo-interest',        label: 'Project needs', icon: Zap },
 ]
 
 export default function AppNav() {
@@ -44,12 +44,12 @@ export default function AppNav() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           {/* Settings link */}
-          <Link href="/settings"
-            className={cn('p-1.5 rounded-lg transition-colors', path.startsWith('/settings') ? 'text-sc-400' : '')}
-            style={{ color: path.startsWith('/settings') ? undefined : 'var(--text-3)' }}>
+          <Link href="/demo-settings"
+            className={cn('p-1.5 rounded-lg transition-colors', path.startsWith('/demo-settings') ? 'text-sc-400' : '')}
+            style={{ color: path.startsWith('/demo-settings') ? undefined : 'var(--text-3)' }}>
             <Settings size={16} />
           </Link>
-          <Link href={`/profile/${CURRENT_USER.slug}`}
+          <Link href={`/demo-profile/${CURRENT_USER.slug}`}
             className="flex items-center gap-2 pl-2 border-l" style={{ borderColor: 'var(--border)' }}>
             <div className="w-7 h-7 rounded-full bg-sc-600/20 flex items-center justify-center text-sc-300 text-xs font-semibold">
               {getInitials(CURRENT_USER.name)}

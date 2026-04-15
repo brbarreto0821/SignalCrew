@@ -6,6 +6,8 @@ import { supabase } from '@/lib/supabaseClient'
 import { ArrowLeft, Mail, Lock, AlertCircle, Check } from 'lucide-react'
 
 export default function SignUpPage() {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -27,6 +29,12 @@ export default function SignUpPage() {
     const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          firstName,
+          lastName,
+        },
+      },
     })
     if (signUpError) {
       setError(signUpError.message)
@@ -57,6 +65,30 @@ export default function SignUpPage() {
               </div>
             )}
             {/* success message now handled by redirect */}
+            <div className="flex gap-3">
+              <div className="w-1/2">
+                <label className="label">First name</label>
+                <input
+                  className="input"
+                  type="text"
+                  placeholder="First name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="w-1/2">
+                <label className="label">Last name</label>
+                <input
+                  className="input"
+                  type="text"
+                  placeholder="Last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
             <div>
               <label className="label">Email address</label>
               <div className="relative">
